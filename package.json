@@ -17,7 +17,8 @@
     "react-native": "0.76.5",
     "react-native-image-picker": "^7.2.3",
     "react-native-safe-area-context": "^5.0.0",
-    "react-native-screens": "^4.3.0"
+    "react-native-screens": "^4.3.0",
+    "react-native-stock-star-rating": "^1.0.6"
   },
   "devDependencies": {
     "@babel/core": "^7.25.2",

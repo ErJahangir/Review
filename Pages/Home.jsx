@@ -12,16 +12,19 @@ import {
 } from 'react-native';
 import React, {useState} from 'react';
 import {launchImageLibrary} from 'react-native-image-picker';
+import {RatingInput, Rating} from 'react-native-stock-star-rating';
 
 const Home = () => {
   const [showModal, setShowModal] = useState(false);
   const [Review, setReview] = useState([]);
+  const [ratings, setRating] = React.useState(0);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
     size: '',
     fabric: '',
     image: '',
+    rating: 0,
   });
 
   const handleUploadImage = async () => {
@@ -42,9 +45,20 @@ const Home = () => {
   };
 
   const handleSubmit = () => {
-    Review.push(formData);
+    Review.push({...formData, rating: ratings});
+    // console.log({...formData, rating: ratings});
+    setFormData({
+      ...formData,
+      description: '',
+      fabric: '',
+      image: '',
+      rating: 0,
+      size: '',
+    });
+    setRating(0);
     setShowModal(false);
   };
+  // console.log(Review);
 
   return (
     <View style={styles.container}>
@@ -102,38 +116,20 @@ const Home = () => {
                     <Text>Seam Explorer </Text>
                   </View>
                 </View>
-                <View
-                  style={{
-                    display: 'flex',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    gap: 5,
-                    marginBlock: 10,
-                  }}>
-                  <Image
-                    source={require('../public/filledstar.png')}
-                    style={{width: 25, height: 25}}
-                  />
-                  <Image
-                    source={require('../public/filledstar.png')}
-                    style={{width: 25, height: 25}}
-                  />
-                  <Image
-                    source={require('../public/filledstar.png')}
-                    style={{width: 25, height: 25}}
-                  />
-                  <Image
-                    source={require('../public/filledstar.png')}
-                    style={{width: 25, height: 25}}
-                  />
-                  <Image
-                    source={require('../public/filledstar.png')}
-                    style={{width: 25, height: 25}}
-                  />
-                </View>
+                <Rating
+                  stars={item.rating}
+                  maxStars={5}
+                  size={40}
+                  color={'black'}
+                />
               </View>
 
-              <Image source={{uri: item.image}} style={styles.imageuplodaed} />
+              {item.image && (
+                <Image
+                  source={{uri: item.image}}
+                  style={styles.imageuplodaed}
+                />
+              )}
             </View>
             <View style={styles.itemsizediv}>
               <View style={styles.sizeIcon}>
@@ -194,7 +190,14 @@ const Home = () => {
                 <Text style={styles.inputTitle}>
                   How would you rate your experience?
                 </Text>
-                <View style={{display: 'flex', flexDirection: 'column'}}></View>
+                <RatingInput
+                  rating={ratings}
+                  setRating={setRating}
+                  size={50}
+                  maxStars={5}
+                  color={'black'}
+                  bordered={false}
+                />
               </View>
               <View style={styles.inputDiv}>
                 <Text style={styles.inputTitle}>
@@ -332,13 +335,14 @@ const styles = StyleSheet.create({
   },
   imageuplodaed: {
     width: 95,
-    height: 74,
+    height: 80,
     borderRadius: 5,
   },
   itemsizediv: {
     display: 'flex',
     flexDirection: 'row',
     gap: 50,
+    marginBlock: 5,
   },
   sizeIcon: {
     display: 'flex',
